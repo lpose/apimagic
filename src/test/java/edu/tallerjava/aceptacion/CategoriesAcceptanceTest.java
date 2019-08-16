@@ -1,7 +1,9 @@
 package edu.tallerjava.aceptacion;
 
 import edu.tallerjava.modelo.Category;
+import edu.tallerjava.services.CategoryService;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 // HTTP client and server will run in separate threads, thus separate transactions.
 // Any transaction initiated on the server won’t rollback in this case.
 public class CategoriesAcceptanceTest extends AcceptanceTest{
+
+    @Autowired
+    private CategoryService categoryService;
 
     @Test
     @Sql(value = "/sql/createCategories.sql")

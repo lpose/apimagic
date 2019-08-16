@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class CategoryController {
@@ -19,20 +20,8 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping(path = "/categories")
-    public ResponseEntity<List<Category>> list(){
-        ArrayList<Category> listaCategorias = new ArrayList<Category>();
-
-        Category catTest = new Category();
-        catTest.setId(4L);
-        listaCategorias.add(new Category());
-        listaCategorias.add(new Category());
-        listaCategorias.add(new Category());
-        listaCategorias.add(new Category());
-        listaCategorias.add(new Category());
-        listaCategorias.add(new Category());
-        listaCategorias.add(new Category());
-        listaCategorias.add(catTest);
-        return new ResponseEntity<List<Category>> (listaCategorias,HttpStatus.OK);
+    public ResponseEntity<List<Category>> getList(){
+        return new ResponseEntity<List<Category>> (categoryService.getList(),HttpStatus.OK);
     }
 
     @PostMapping(path = "/categories")
@@ -46,17 +35,12 @@ public class CategoryController {
      @GetMapping (path = "categories/{id}")
      //Devuelve una categoria por ID
      public ResponseEntity<Category> devolverCategoriaPorID(@PathVariable Long id){
-         ArrayList<Category> listaCategorias = new ArrayList<Category>();
-         Category catTest = new Category();
-         catTest.setId(4L);
-         listaCategorias.add(catTest);
-
-         for (Category category: listaCategorias) {
-             if (category.getId().equals(id)){
-                 return new ResponseEntity<Category> (category,HttpStatus.OK);
-             }
-         }
-         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        Optional opt = categoryService.findById(id);
+        if (opt.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }else{
+            return new ResponseEntity<Category>((Category)opt.get(), HttpStatus.OK);
+        }
 
 
      }

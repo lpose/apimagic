@@ -18,16 +18,17 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public List<Category> getList() {
-        return null;
+        return repository.findAll();
     }
 
     @Override
     public Category save(Category category) {
-        return null;
+        return repository.save(category);
     }
 
     @Override
     public Optional<Category> findById(Long id) {
-        return Optional.empty();
+        Optional opt = repository.findById(id);
+        return opt;
     }
 }
